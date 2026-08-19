@@ -1,0 +1,15 @@
+{
+  "version": "1.0",
+  "appId": null,
+  "appDisplayName": "WeParts - Commercial",
+  "region": "prod",
+  "appType": "CodeApp",
+  "environmentId": "4ae3f80a-7976-efd1-b8b1-adc52898ed14",
+  "description": " ",
+  "buildPath": "./dist",
+  "buildEntryPoint": "index.html",
+  "localAppUrl": "http://localhost:3000",
+  "logoPath": "Default",
+  "connectionReferences": {},
+  "databaseReferences": {}
+}
