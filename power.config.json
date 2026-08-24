@@ -1,15 +1,65 @@
 {
   "version": "1.0",
-  "appId": null,
+  "appId": "9bb57228-d92f-4ddc-8ad6-c7adcbefb3f0",
   "appDisplayName": "WeParts - Commercial",
   "region": "prod",
   "appType": "CodeApp",
   "environmentId": "4ae3f80a-7976-efd1-b8b1-adc52898ed14",
-  "description": " ",
+  "description": "",
   "buildPath": "./dist",
   "buildEntryPoint": "index.html",
   "localAppUrl": "http://localhost:3000",
   "logoPath": "Default",
-  "connectionReferences": {},
-  "databaseReferences": {}
+  "connectionReferences": {
+    "16e3eb8e-1566-4d16-8752-ecc64032fe0a": {
+      "id": "/providers/Microsoft.PowerApps/apis/shared_office365users",
+      "displayName": "Office 365 Users",
+      "dataSources": [
+        "office365users"
+      ],
+      "dataSets": {}
+    }
+  },
+  "databaseReferences": {
+    "default.cds": {
+      "dataSources": {
+        "wfrd3dobjss": {
+          "entitySetName": "cr720_wfrd3dobjs_2s",
+          "logicalName": "cr720_wfrd3dobjs_2",
+          "isHidden": false
+        },
+        "users": {
+          "entitySetName": "systemusers",
+          "logicalName": "systemuser",
+          "isHidden": false
+        },
+        "wfrdpricelists": {
+          "entitySetName": "cr720_wfrdpricelists",
+          "logicalName": "cr720_wfrdpricelist",
+          "isHidden": false
+        },
+        "wfrdwosalesaggregators": {
+          "entitySetName": "cr720_wfrdwosalesaggregators",
+          "logicalName": "cr720_wfrdwosalesaggregator",
+          "isHidden": false
+        },
+        "wfrdprice_drivensaleslists": {
+          "entitySetName": "cr720_wfrdpricedrivensaleslists",
+          "logicalName": "cr720_wfrdpricedrivensaleslist",
+          "isHidden": false
+        },
+        "wfrdexecutivehubtimelogs": {
+          "entitySetName": "cr720_wfrdexecutivehubtimelogs",
+          "logicalName": "cr720_wfrdexecutivehubtimelog",
+          "isHidden": false
+        },
+        "wfrdmanufactureaddressess": {
+          "entitySetName": "cr720_wfrdmanufactureaddresseses",
+          "logicalName": "cr720_wfrdmanufactureaddresses",
+          "isHidden": false
+        }
+      },
+      "environmentVariableName": ""
+    }
+  }
 }

@@ -1,0 +1,10 @@
+allowBuilds:
+  '@azure/msal-node-extensions': true
+  '@azure/msal-node-runtime': true
+  esbuild: true
+  keytar: true
+onlyBuiltDependencies:
+  - '@azure/msal-node-extensions'
+  - '@azure/msal-node-runtime'
+  - esbuild
+  - keytar
