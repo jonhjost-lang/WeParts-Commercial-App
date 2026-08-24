@@ -1,29 +1,27 @@
 import { useEffect, useMemo, useState } from 'react';
 import weatherfordLogo from '../../assets/logo-wtfd.png';
 import { useCurrentUser } from '../../hooks/useCurrentUser';
+import type { UserProfile } from '../../config/accessControl';
+import { destinationsFor } from '../../config/navigation';
+import NavigationIcon from './NavigationIcon';
 
-interface HeaderProps { onNavigate: (screen: string) => void; }
-
-const destinations = [
-  { id: 'home', label: 'Home', hint: 'Global sales portal' },
-  { id: 'catalog', label: 'Purchase Catalog', hint: 'Browse MPD products and pricing' },
-  { id: 'orders', label: 'My Orders', hint: 'Track purchase requests and history' },
-  { id: 'fulfillment', label: 'Order Fulfillment', hint: 'Treat requests and register deliveries' },
-];
-
-function NavigationIcon({ id }: { id: string }) {
-  if (id === 'home') return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>;
-  if (id === 'catalog') return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5v-15Z"/><path d="M4 20.5A2.5 2.5 0 0 1 6.5 18H20M8 7h8M8 11h6"/></svg>;
-  if (id === 'orders') return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M6 3h12v18H6z"/><path d="M9 7h6M9 11h6M9 15h4"/><path d="m15 16 1.5 1.5L20 14"/></svg>;
-  return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M3 7h11v10H3zM14 10h4l3 3v4h-7z"/><circle cx="7" cy="19" r="2"/><circle cx="17" cy="19" r="2"/><path d="m6 11 2 2 4-4"/></svg>;
+interface HeaderProps {
+  onNavigate: (screen: string) => void;
+  profile: UserProfile;
 }
 
-export default function Header({ onNavigate }: HeaderProps) {
+export default function Header({ onNavigate, profile }: HeaderProps) {
   const user = useCurrentUser();
   const [commandOpen, setCommandOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const filtered = useMemo(() => destinations.filter((item) => `${item.label} ${item.hint}`.toLowerCase().includes(query.toLowerCase())), [query]);
+  // Gated by profile before the text filter: the palette must never navigate
+  // to a screen the Sidebar hides.
+  const destinations = useMemo(() => destinationsFor(profile), [profile]);
+  const filtered = useMemo(
+    () => destinations.filter((item) => `${item.label} ${item.hint}`.toLowerCase().includes(query.toLowerCase())),
+    [destinations, query],
+  );
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
