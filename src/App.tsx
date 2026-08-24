@@ -3,6 +3,7 @@ import { lazy, Suspense, useState } from 'react';
 import { canAccess, HOME_SCREEN, isScreenName, type ScreenName } from './config/navigation';
 import { useUserProfile } from './hooks/useUserProfile';
 
+import Breadcrumb from './components/layout/Breadcrumb';
 import Header from './components/layout/Header';
 import Sidebar from './components/layout/Sidebar';
 import HomeScreen from './components/screens/HomeScreen';
@@ -11,6 +12,7 @@ import LoadingMark from './components/ui/LoadingMark';
 const PurchaseCatalogScreen = lazy(() => import('./components/screens/PurchaseCatalogScreen'));
 const MyOrdersScreen = lazy(() => import('./components/screens/MyOrdersScreen'));
 const OrderFulfillmentScreen = lazy(() => import('./components/screens/OrderFulfillmentScreen'));
+const POTemplatesScreen = lazy(() => import('./components/screens/POTemplatesScreen'));
 
 function ScreenFallback() {
   return (
@@ -41,14 +43,15 @@ export default function App() {
       <div className="app-shell">
         <Sidebar activeScreen={visibleScreen} onNavigate={navigate} profile={profile} />
         <main className="main">
+          <Breadcrumb screen={visibleScreen} onNavigate={navigate} />
           {visibleScreen === 'catalog' ? (
-            <Suspense fallback={<ScreenFallback />}>
-              <PurchaseCatalogScreen />
-            </Suspense>
+            <Suspense fallback={<ScreenFallback />}><PurchaseCatalogScreen /></Suspense>
           ) : visibleScreen === 'orders' ? (
             <Suspense fallback={<ScreenFallback />}><MyOrdersScreen /></Suspense>
           ) : visibleScreen === 'fulfillment' ? (
             <Suspense fallback={<ScreenFallback />}><OrderFulfillmentScreen /></Suspense>
+          ) : visibleScreen === 'po-templates' ? (
+            <Suspense fallback={<ScreenFallback />}><POTemplatesScreen /></Suspense>
           ) : (
             <HomeScreen onNavigate={navigate} profile={profile} />
           )}

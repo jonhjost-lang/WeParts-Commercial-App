@@ -17,5 +17,8 @@ export default function NavigationIcon({ id, className }: NavigationIconProps) {
   if (id === 'orders') {
     return <svg {...shared}><path d="M6 3h12v18H6z" /><path d="M9 7h6M9 11h6M9 15h4" /><path d="m15 16 1.5 1.5L20 14" /></svg>;
   }
+  if (id === 'po-templates') {
+    return <svg {...shared}><path d="M4 4h9l4 4v12H4z" /><path d="M13 4v4h4" /><path d="M7 12h7M7 16h5" /></svg>;
+  }
   return <svg {...shared}><path d="M3 7h11v10H3zM14 10h4l3 3v4h-7z" /><circle cx="7" cy="19" r="2" /><circle cx="17" cy="19" r="2" /><path d="m6 11 2 2 4-4" /></svg>;
 }
