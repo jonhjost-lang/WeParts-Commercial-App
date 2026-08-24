@@ -1,6 +1,30 @@
-interface HomeScreenProps { onNavigate: (screen: string) => void; }
+import { lazy, Suspense, useState } from 'react';
 
-export default function HomeScreen({ onNavigate }: HomeScreenProps) {
+import AIUploadPOBanner from '../po/AIUploadPOBanner';
+
+// Pulls in the parser and pdfjs-dist (~450 kB). Loaded only when a file is
+// actually dropped, so it never weighs on first paint.
+const POUploadDialog = lazy(() => import('../po/POUploadDialog'));
+import { isInternal, type UserProfile } from '../../config/accessControl';
+import { canAccess } from '../../config/navigation';
+import type { PoData } from '../../lib/poParser';
+import { importPurchaseOrder } from '../../services/poImport';
+
+interface HomeScreenProps {
+  onNavigate: (screen: string) => void;
+  profile: UserProfile;
+}
+
+export default function HomeScreen({ onNavigate, profile }: HomeScreenProps) {
+  const [poFile, setPoFile] = useState<File | null>(null);
+  const [notice, setNotice] = useState<string | null>(null);
+
+  const confirmImport = async (data: PoData) => {
+    const outcome = await importPurchaseOrder(data);
+    setPoFile(null);
+    setNotice(outcome.message);
+  };
+
   return (
     <section className="screen active global-home">
       <div className="global-hero">
@@ -20,6 +44,14 @@ export default function HomeScreen({ onNavigate }: HomeScreenProps) {
           <strong>MPD</strong><small>Commercial ordering portal</small>
         </div>
       </div>
+
+      {/* Purchase orders are received from the customer and processed internally. */}
+      {isInternal(profile) ? (
+        <>
+          <AIUploadPOBanner onFile={setPoFile} />
+          {notice ? <p className="wep-po-notice" role="status">{notice}</p> : null}
+        </>
+      ) : null}
 
       <div className="global-stats">
         <button className="home-capability" onClick={() => onNavigate('catalog')}>
@@ -45,9 +77,14 @@ export default function HomeScreen({ onNavigate }: HomeScreenProps) {
         <div className="home-workflow">
           <button onClick={() => onNavigate('catalog')}><i>01</i><span><b>Select products</b><small>Choose parts and quantities</small></span><strong>→</strong></button>
           <button onClick={() => onNavigate('orders')}><i>02</i><span><b>Follow requests</b><small>See files, status and history</small></span><strong>→</strong></button>
-          <button onClick={() => onNavigate('fulfillment')}><i>03</i><span><b>Manage delivery</b><small>Coordinate pickup and fulfillment</small></span><strong>→</strong></button>
+          {canAccess('fulfillment', profile) ? <button onClick={() => onNavigate('fulfillment')}><i>03</i><span><b>Manage delivery</b><small>Coordinate pickup and fulfillment</small></span><strong>→</strong></button> : null}
         </div>
       </div>
+      {poFile ? (
+        <Suspense fallback={null}>
+          <POUploadDialog file={poFile} onClose={() => setPoFile(null)} onConfirm={confirmImport} />
+        </Suspense>
+      ) : null}
     </section>
   );
 }

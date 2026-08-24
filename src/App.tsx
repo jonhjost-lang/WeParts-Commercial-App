@@ -50,7 +50,7 @@ export default function App() {
           ) : visibleScreen === 'fulfillment' ? (
             <Suspense fallback={<ScreenFallback />}><OrderFulfillmentScreen /></Suspense>
           ) : (
-            <HomeScreen onNavigate={navigate} />
+            <HomeScreen onNavigate={navigate} profile={profile} />
           )}
         </main>
       </div>
